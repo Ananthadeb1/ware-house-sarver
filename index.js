@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config()
+require('dotenv').config();
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 const app = express();
@@ -11,34 +11,43 @@ app.use(express.json());
 
 
 
-
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.3c5i0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = "mongodb+srv://perfumehouse1:2tkIVwWEJAxm8muk@cluster0.emv2o.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+
+
+
+
+
+
+// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.3c5i0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 
 async function run() {
     try {
         await client.connect();
-        const spiceCollection = client.db('pure-spices').collection('spice');
+        console.log('db connected');
+        const perfumeCollection = client.db('Perfumehouse').collection('perfume');
         // const orderCollection = client.db('pure-spices').collection('order');
 
-        app.get('/spices', async (req, res) => {
+        app.get('/perfumes', async (req, res) => {
             const query = {};
-            const cursor = spiceCollection.find(query);
-            const spices = await cursor.toArray();
-            res.send(spices);
+            const cursor = perfumeCollection.find(query);
+            const perfumes = await cursor.toArray();
+            console.log('db con');
+            res.send(perfumes);
         })
 
-        app.get('/spice/:id', async (req, res) => {
+        app.get('/perfume/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
-            const spice = await spiceCollection.findOne(query);
-            res.send(spice);
+            const perfume = await perfumeCollection.findOne(query);
+            res.send(perfume);
 
         })
-        app.post('/spices', async (req, res) => {
+        app.post('/perfumes', async (req, res) => {
             const newSpice = req.body;
-            const result = await spiceCollection.insertOne(newSpice);
+            const result = await perfumeCollection.insertOne(newSpice);
             res.send(result);
         })
         // app.post('/orders', async (req, res) => {
@@ -47,7 +56,7 @@ async function run() {
         //     res.send(result);
         // })
 
-        app.put('/spice/:id', async (req, res) => {
+        app.put('/perfume/:id', async (req, res) => {
             const id = req.params.id;
             const Quantity = req.body;
             console.log(Quantity);
@@ -58,14 +67,14 @@ async function run() {
                     quantity: Quantity.newQuantity,
                 }
             };
-            const result = await spiceCollection.updateOne(filter, updatedDoc, options);
+            const result = await perfumeCollection.updateOne(filter, updatedDoc, options);
             res.send(result);
         })
 
-        app.delete('/spice/:id', async (req, res) => {
+        app.delete('/perfume/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
-            const result = await spiceCollection.deleteOne(query)
+            const result = await perfumeCollection.deleteOne(query)
             res.send(result)
         })
     }
