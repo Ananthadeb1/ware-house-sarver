@@ -28,7 +28,7 @@ async function run() {
         await client.connect();
         console.log('db connected');
         const perfumeCollection = client.db('Perfumehouse').collection('perfume');
-        // const orderCollection = client.db('pure-spices').collection('order');
+        const orderCollection = client.db('Perfumehouse').collection('order');
 
         app.get('/perfumes', async (req, res) => {
             const query = {};
@@ -50,11 +50,12 @@ async function run() {
             const result = await perfumeCollection.insertOne(newSpice);
             res.send(result);
         })
-        // app.post('/orders', async (req, res) => {
-        //     const stockData = req.body;
-        //     const result = await orderCollection.insertOne(stockData);
-        //     res.send(result);
-        // })
+        app.post('/orders', async (req, res) => {
+            const stockData = req.body;
+            const result = await orderCollection.insertOne(stockData);
+            res.send(result);
+        })
+        
 
         app.put('/perfume/:id', async (req, res) => {
             const id = req.params.id;
