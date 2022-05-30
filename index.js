@@ -26,7 +26,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         await client.connect();
-        console.log('db connected');
+        console.log('connected huya');
         const perfumeCollection = client.db('Perfumehouse').collection('perfume');
         const orderCollection = client.db('Perfumehouse').collection('order');
 
